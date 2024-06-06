@@ -1,0 +1,3 @@
+rules:
+  - id: php-lang-security
+    paths: https://github.com/semgrep/semgrep-rules/blob/develop/php/lang/security
