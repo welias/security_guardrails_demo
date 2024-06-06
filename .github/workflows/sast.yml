@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install Semgrep
+      run: pip install semgrep
+
+    - name: Run Semgrep
+      run: semgrep --config https://github.com/semgrep/semgrep-rules/blob/develop/php/lang/security --json > semgrep_results.json
+
+    - name: Set up OPA
+      run: |
+        curl -L -o opa https://openpolicyagent.org/downloads/v0.27.1/opa_linux_amd64
+        chmod +x ./opa
+
+    - name: Validate with OPA
+      run: |
+        ./opa eval --input semgrep_results.json --data policy.rego 'data.semgrep.policy.deny'
