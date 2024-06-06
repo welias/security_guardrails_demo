@@ -28,7 +28,7 @@ jobs:
       run: semgrep --version
 
     - name: Run Semgrep
-      run: semgrep --config=.semgrep.yml --json > semgrep_results.json
+      run: semgrep --config "p/php" --json > semgrep_results.json
 
     - name: Debug Semgrep results
       run: cat semgrep_results.json
