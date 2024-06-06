@@ -27,6 +27,9 @@ jobs:
     - name: Check Semgrep version
       run: semgrep --version
 
+    - name: Debug Semgrep results
+      run: cat semgrep_results.json
+      
     - name: Run Semgrep
       run: semgrep --config "p/php" --json > semgrep_results.json
 
