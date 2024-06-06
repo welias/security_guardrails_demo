@@ -27,11 +27,8 @@ jobs:
     - name: Check Semgrep version
       run: semgrep --version
 
-    - name: Run Semgrep (Debug)
-      run: semgrep --config=https://github.com/semgrep/semgrep-rules/tree/develop/php/lang/security
-
     - name: Run Semgrep and save results
-      run: semgrep --config=https://github.com/semgrep/semgrep-rules/tree/develop/php/lang/security --json > semgrep_results.json
+      run: semgrep --config "p/php" --json > semgrep_results.json
 
     - name: Set up OPA
       run: |
