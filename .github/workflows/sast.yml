@@ -24,7 +24,13 @@ jobs:
     - name: Install Semgrep
       run: pip install semgrep
 
-    - name: Run Semgrep
+    - name: Check Semgrep version
+      run: semgrep --version
+
+    - name: Run Semgrep (Debug)
+      run: semgrep --config=https://semgrep.dev/p/php-security-audit
+
+    - name: Run Semgrep and save results
       run: semgrep --config=https://semgrep.dev/p/php-security-audit --json > semgrep_results.json
 
     - name: Set up OPA
@@ -33,5 +39,4 @@ jobs:
         chmod +x ./opa
 
     - name: Validate with OPA
-      run: |
-        ./opa eval --input semgrep_results.json --data policy.rego 'data.semgrep.policy.deny'
+      run: ./opa eval --input semgrep_results.json --data policy.rego 'data.semgrep.policy.deny'
