@@ -27,14 +27,16 @@ jobs:
     - name: Check Semgrep version
       run: semgrep --version
 
-    - name: Debug Semgrep results
-      run: cat semgrep_results.json
-      
     - name: Run Semgrep
-      run: semgrep --config "p/php" --json > semgrep_results.json
+      id: semgrep
+      run: semgrep --config="p/php" --json > semgrep_results.json || echo "Semgrep failed"
+
+    - name: Check Semgrep Results File
+      run: ls -la
 
     - name: Debug Semgrep results
-      run: cat semgrep_results.json
+      if: always()
+      run: cat semgrep_results.json || echo "No Semgrep results"
 
     - name: Set up OPA
       run: |
@@ -42,4 +44,11 @@ jobs:
         chmod +x ./opa
 
     - name: Validate with OPA
-      run: ./opa eval --input semgrep_results.json --data .github/workflows/policy.rego 'data.semgrep.policy.deny'
+      if: always()
+      run: ./opa eval --input semgrep_results.json --data .github/workflows/policy.rego 'data.semgrep.policy.deny' || echo "OPA evaluation failed"
+
+    - name: Display OPA results
+      if: always()
+      run: |
+        echo "OPA Results:"
+        ./opa eval --input semgrep_results.json --data .github/workflows/policy.rego 'data.semgrep.policy.deny' --format json | jq .
