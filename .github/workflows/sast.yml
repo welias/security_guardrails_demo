@@ -25,7 +25,7 @@ jobs:
       run: pip install semgrep
 
     - name: Run Semgrep
-      run: semgrep --config https://github.com/semgrep/semgrep-rules/blob/develop/php/lang/security --json > semgrep_results.json
+      run: semgrep --config=https://semgrep.dev/p/php-security-audit --json > semgrep_results.json
 
     - name: Set up OPA
       run: |
