@@ -27,8 +27,11 @@ jobs:
     - name: Check Semgrep version
       run: semgrep --version
 
-    - name: Run Semgrep and save results
-      run: semgrep --config "p/php" --json > semgrep_results.json
+    - name: Run Semgrep
+      run: semgrep --config=.semgrep.yml --json > semgrep_results.json
+
+    - name: Debug Semgrep results
+      run: cat semgrep_results.json
 
     - name: Set up OPA
       run: |
@@ -37,4 +40,3 @@ jobs:
 
     - name: Validate with OPA
       run: ./opa eval --input semgrep_results.json --data .github/workflows/policy.rego 'data.semgrep.policy.deny'
-
