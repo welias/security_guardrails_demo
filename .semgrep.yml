@@ -1,3 +1,4 @@
 rules:
-  - id: php-lang-security
-    paths: https://github.com/semgrep/semgrep-rules/blob/develop/php/lang/security
+  - id: semgrep-php-security
+    pattern-either:
+      - semgrep-rules/php/lang/security
